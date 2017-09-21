@@ -41,7 +41,7 @@
 
 
     var client = new HttpClient();
-    client.get("http://localhost:8080/season/1", function(response) {
+    client.get("https://localhost:8080/season/1", function(response) {
     	data = JSON.parse(response);
 
     	Object.keys(data.data.episode).forEach(key => {
