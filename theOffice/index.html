@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<title>the Office Co-occurrence</title> 
+<script src="https://d3js.org/d3.v4.min.js" charset="utf-8"></script>
+<script src="index.js"></script>
+<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+<style>
+	@import url(../main.css);
+</style>
+
+<h1><strong>the Office</strong> Co-occurence</h1>
+
+<aside style="margin-top: 80px;">
+	<p>Order:</p> <select id="order">
+		<option value="name">by Name</option>
+		<option value="count">by Frequency</option>
+		<option value="group">by Cluster</option>
+	</select>
+
+	<p>This matrix diagram is inspired by Mike Bostock's visualization of <i>Les Miserables.</i></p>
+	<p>Built with <a href="https://d3js.org/">d3.js</a></p>
+</aside>
+
+<script>
+	var data = []
+	var margin = {top: 80, right: 0, left: 80, bottom: 10}, width = 720, height = 720
+	var x = d3.scaleOrdinal().range([0, width]),
+	z = d3.scaleLinear().domain([0,4]),
+	c = d3.scaleOrdinal(d3.schemeCategory10)
+
+	z.clamp(true)
+
+
+	var svg = d3.select("body").append("svg")
+		.attr("width", width + margin.left + margin.right)
+		.attr("height", height + margin.top + margin.bottom)
+		.style("margin-left", -margin.left + "px")
+		.append("g")
+			.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+
+    var client = new HttpClient();
+    client.get("http://localhost:8080/season/1", function(response) {
+    	data = JSON.parse(response);
+
+    	Object.keys(data.data.episode).forEach(key => {
+    		[links, nodes] = generateNodesAndLinks(data.data.episode[key], key);
+    		console.log(links);
+    	});
+    });
+
+
+</script>
+</html>
