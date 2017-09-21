@@ -32,8 +32,9 @@ const generateNodesAndLinks = function(episode_guide, key) {
 	var links_by_episode = {};
 
 	Object.keys(episode_guide).forEach(key => {
-		nodes = nodes.union([...new Set(episode_guide[key].map(name => name.split(":")[0]))]);
-		var char_links = pairwise([...new Set(episode_guide[key].map(name => name.split(":")[0]))].sort());
+		var characters_in_scene = episode_guide[key].filter(name => name.indexOf(':') != -1).map(name => name.split(":")[0]);
+		nodes = nodes.union([...new Set(characters_in_scene)]);
+		var char_links = pairwise([...new Set(characters_in_scene)].sort());
 		for (i = 0; i < char_links.length; i++) {
 			links.push({"source": char_links[i][0], "target": char_links[i][1]});
 		}
