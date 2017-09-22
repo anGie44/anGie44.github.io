@@ -41,13 +41,10 @@
 
 
     var client = new HttpClient();
-    client.get("https://localhost:8080/season/1", function(response) {
+    client.get("https://localhost:8080/season/1/format/connections", function(response) {
     	data = JSON.parse(response);
 
-    	Object.keys(data.data.episode).forEach(key => {
-    		[links, nodes] = generateNodesAndLinks(data.data.episode[key], key);
-    		console.log(links);
-    	});
+
     });
 
 
