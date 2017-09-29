@@ -1706,6 +1706,10 @@
 		margin: 0 0 0 2em;
 	}
 
+	p.special_list_items_bottom {
+		margin: 0 0 2em 2em;
+	}
+
 	h1, h2, h3, h4, h5, h6 {
 		color: #ffffff;
 		font-weight: bold;
