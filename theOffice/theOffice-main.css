@@ -6,7 +6,7 @@ html {
   min-width: 1040px;
 }
 
-.ocks-org body {
+body {
   background: #fcfcfa;
   color: #333;
   font-family: "Raleway", sans-serif;
@@ -15,25 +15,25 @@ html {
   width: 960px;
 }
 
-.ocks-org header,
-.ocks-org footer,
-.ocks-org aside,
-.ocks-org h1,
-.ocks-org h2,
-.ocks-org h3,
-.ocks-org h4 {
+header,
+footer,
+aside,
+h1,
+h2,
+h3,
+h4 {
   font-family: "Raleway", sans-serif;
 }
 
-.ocks-org h1,
-.ocks-org h2,
-.ocks-org h3,
-.ocks-org h4 {
+h1,
+h2,
+h3,
+h4 {
   color: #000;
 }
 
-.ocks-org header,
-.ocks-org footer {
+header,
+footer {
   color: #636363;
 }
 
@@ -65,14 +65,14 @@ footer {
   font-size: small;
 }
 
-.ocks-org header aside,
-.ocks-org footer aside {
+header aside,
+footer aside {
   float: left;
   margin-right: .5em;
 }
 
-.ocks-org header aside:after,
-.ocks-org footer aside:after {
+header aside:after,
+footer aside:after {
   padding-left: .5em;
   content: "/";
 }
