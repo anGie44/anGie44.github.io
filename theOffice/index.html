@@ -49,7 +49,7 @@
 
 	var options = select
 		.selectAll('option')
-		.data(["Select a Season"].concat(Array.from(new Array(9), (x,i) => i + 1)).enter()
+		.data(["Select a Season"].concat(Array.from(new Array(9), (x,i) => i + 1))).enter()
 		.append('option')
 			.text(function(d) { return d; })
 		.each(function(d) { 
