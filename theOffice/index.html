@@ -3,6 +3,8 @@
 <meta charset="utf-8">
 <title>the Office Co-occurrence</title> 
 <script src="https://d3js.org/d3.v4.min.js" charset="utf-8"></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.0.1/spin.min.js'></script> 
+
 <style>
 	@import url('theOffice-main.css');
 	.background {
@@ -18,6 +20,7 @@
 	}
 
 </style>
+<body>
 
 <h1><strong>the Office</strong> Co-occurrence</h1>
 
@@ -37,8 +40,12 @@
 	<p>It's made possible by <a href="http://officequotes.net" target="_blank">officequote.net</a>'s detailed transcripts of all 9 seasons of the show and an API I developed to process and analyze the corpora.</p>
 	<p>Built with <a href="https://d3js.org/" target="_blank">d3.js</a></p>
 </aside>
-
+<section id="spinn"></section>
+<!-- <div style="background-color: blue">
+<img src="" width="40"/>
+</div> -->
 <script>
+
 	var data = [], links = [], nodes = [], isFirst = true;
 	var margin = {top: 80, right: 0, left: 80, bottom: 10}, width = 720, height = 720;
 	var x = d3.scaleBand().rangeRound([0, width]), z = d3.scaleLinear().domain([0,4]),
@@ -46,16 +53,17 @@
 
 	z.clamp(true)
 
-	var svg = d3.select("body").append("svg")
+    var svg = d3.select("body").append("svg")
 			.attr("class", "office_mat")
+			.attr("id", "office_mat")
 			.attr("width", width + margin.left + margin.right)
 			.attr("height", height + margin.top + margin.bottom)
 			.style("margin-left", -margin.left + "px")
 			.append("g")
 				.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
+  
 	var select_season = d3.select("#season")
-		.on('change', getQuotes);
+		.on('change', getQuotesAndEpisodeList);
 
 	var select_episode = d3.select("#episode")
 		.on('change', getConnections);
@@ -69,9 +77,47 @@
 			if (d === "Select a Season" || d === 5) {
 				d3.select(this).property("disabled", true)
 			}
+			if (d === 1) {
+				d3.select(this).property("selected", true)
+			}
 		});
 
-	function getQuotes() {
+
+	var spinnConfig = {
+		target: 'spinn',
+		width : width,
+		height: height,
+		val: 90
+	};
+
+	var opts = {
+	  lines: 9, // The number of lines to draw
+	  length: 9, // The length of each line
+	  width: 5, // The line thickness
+	  radius: 14, // The radius of the inner circle
+	  color: '#EE3124', // #rgb or #rrggbb or array of colors
+	  speed: 1.9, // Rounds per second
+	  trail: 40, // Afterglow percentage
+	  className: 'spinner', // The CSS class to assign to the spinner
+	  left: '37.5%',
+	  top: '35%'
+	};
+
+	function getQuotesAndEpisodeList() {
+		if (!isFirst) {
+			d3.select(".office_mat").remove();
+			svg = d3.select("body").append("svg")
+				.attr("class", "office_mat")
+				.attr("width", width + margin.left + margin.right)
+				.attr("height", height + margin.top + margin.bottom)
+				.style("margin-left", -margin.left + "px")
+				.append("g")
+					.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+		}
+
+		var target = document.getElementById(spinnConfig.target);
+		var spinner = new Spinner(opts).spin(target);
+
 		d3.select("#episode").selectAll("option").remove();
 		selectValue = d3.select("#season").property('value');
 		d3.queue()
@@ -91,9 +137,17 @@
 		    			if (d === "Select an Episode") {
 		    				d3.select(this).property("disabled", true)
 		    			}
+		    			if (isFirst && d.includes("1")) {
+		    				isFirst = false;
+		    				d3.select(this).property("selected", true);
+		    				getConnections();
+		    			}
 		    		});
+				spinner.stop();
 			})
 	}
+
+	getQuotesAndEpisodeList();
 
 	function getIndex(value) {
 		var result = nodes.filter(function(obj) { return obj.id == value;});
@@ -112,7 +166,6 @@
 				.append("g")
 					.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 		}
-		isFirst = false;
 
 		selectValue = d3.select("#episode").property('selectedIndex');
 		links = data.data[selectValue-1].links;
@@ -236,5 +289,7 @@
   	
   	}
 
+
 </script>
+</body>
 </html>
