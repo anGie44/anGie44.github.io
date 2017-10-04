@@ -34,19 +34,33 @@
 		</select>
 	</p>
 	<p>This matrix diagram is inspired by Mike Bostock's visualization of <i>Les Miserables.</i></p>
-	<p>It is made possible by officequotes.net's detailed transcripts of all 9 seasons of the show and an API I developed to process and analyze the corpora.</p>
-	<p>Built with <a href="https://d3js.org/">d3.js</a></p>
+	<p>It's made possible by <a href="http://officequotes.net" target="_blank">officequote.net</a>'s detailed transcripts of all 9 seasons of the show and an API I developed to process and analyze the corpora.</p>
+	<p>Built with <a href="https://d3js.org/" target="_blank">d3.js</a></p>
 </aside>
 
 <script>
-	var data = [], links = [], nodes = [];
-	var select = d3.select("#season")
+	var data = [], links = [], nodes = [], isFirst = true;
+	var margin = {top: 80, right: 0, left: 80, bottom: 10}, width = 720, height = 720;
+	var x = d3.scaleBand().rangeRound([0, width]), z = d3.scaleLinear().domain([0,4]),
+	c = d3.scaleOrdinal(d3.schemeCategory10);
+
+	z.clamp(true)
+
+	var svg = d3.select("body").append("svg")
+			.attr("class", "office_mat")
+			.attr("width", width + margin.left + margin.right)
+			.attr("height", height + margin.top + margin.bottom)
+			.style("margin-left", -margin.left + "px")
+			.append("g")
+				.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+	var select_season = d3.select("#season")
 		.on('change', getQuotes);
 
 	var select_episode = d3.select("#episode")
 		.on('change', getConnections);
 
-	var options = select
+	var options_season = select_season
 		.selectAll('option')
 		.data(["Select a Season"].concat(Array.from(new Array(9), (x,i) => i + 1))).enter()
 		.append('option')
@@ -67,8 +81,8 @@
 				// data = results.map(d => JSON.parse(d.response));
 				var episodes = data.data.map(value => value.episode + ": " + value.name)
 				episodes.unshift("Select an Episode")
-				var select = d3.select("#episode")
-	    		var options = select
+				// var select = d3.select("#episode")
+	    		var options_episode = select_episode
 		    		.selectAll('option')
 		    		.data(episodes).enter()
 		    		.append('option')
@@ -88,6 +102,18 @@
 
 
 	function getConnections() {
+		if (!isFirst) {
+			d3.select(".office_mat").remove();
+			svg = d3.select("body").append("svg")
+				.attr("class", "office_mat")
+				.attr("width", width + margin.left + margin.right)
+				.attr("height", height + margin.top + margin.bottom)
+				.style("margin-left", -margin.left + "px")
+				.append("g")
+					.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+		}
+		isFirst = false;
+
 		selectValue = d3.select("#episode").property('selectedIndex');
 		links = data.data[selectValue-1].links;
 		nodes = data.data[selectValue-1].nodes;
@@ -167,7 +193,7 @@
 	  			.attr("width", x.bandwidth())
 	  			.attr("height", x.bandwidth())
 	  			.style("fill-opacity", function(d) { return z(d.z); })
-	  			// .style("fill", function(d) { return nodes[d.x].group == nodes[d.y].group ? c(nodes[d.x].group) : null; })
+	  			.style("fill", function(d) { return c(nodes[d.x]); })
 	  			.on("mouseover", mouseover)
 	  			.on("mouseout", mouseout);
   		}
@@ -209,24 +235,6 @@
   		}, 5000);
   	
   	}
-
-
-
-	var margin = {top: 80, right: 0, left: 80, bottom: 10}, width = 720, height = 720
-	var x = d3.scaleBand().rangeRound([0, width]),
-	z = d3.scaleLinear().domain([0,4]),
-	c = d3.scaleOrdinal(d3.schemeCategory10)
-
-	z.clamp(true)
-
-
-	var svg = d3.select("body").append("svg")
-		.attr("width", width + margin.left + margin.right)
-		.attr("height", height + margin.top + margin.bottom)
-		.style("margin-left", margin.left + "px")
-		.append("g")
-			.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
 
 </script>
 </html>
