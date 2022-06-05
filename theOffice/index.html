@@ -123,7 +123,7 @@
 		d3.queue()
 			.defer(d3.request, "https://the-office-api.herokuapp.com/season/" + selectValue + "/format/connections")
 			.await(function(error, results) {
-				data = JSON.parse(results.response);
+				data = JSON.parse(results);
 				// data = results.map(d => JSON.parse(d.response));
 				var episodes = data.data.map(value => value.episode + ": " + value.name)
 				episodes.unshift("Select an Episode")
