@@ -74,7 +74,7 @@
 		.append('option')
 			.text(function(d) { return d; })
 		.each(function(d) { 
-			if (d === "Select a Season" || d === 5) {
+			if (d === "Select a Season") {
 				d3.select(this).property("disabled", true)
 			}
 			if (d === 1) {
@@ -123,9 +123,10 @@
 		d3.queue()
 			.defer(d3.request, "https://the-office-api.herokuapp.com/season/" + selectValue + "/format/connections")
 			.await(function(error, results) {
-				data = JSON.parse(results);
+				data = JSON.parse(results.response);
+				data.sort((a,b) => a.episode - b.episode)
 				// data = results.map(d => JSON.parse(d.response));
-				var episodes = data.data.map(value => value.episode + ": " + value.name)
+				var episodes = data.map(value => value.episode + ": " + value.episode_name)
 				episodes.unshift("Select an Episode")
 				// var select = d3.select("#episode")
 	    		var options_episode = select_episode
@@ -168,8 +169,8 @@
 		}
 
 		selectValue = d3.select("#episode").property('selectedIndex');
-		links = data.data[selectValue-1].links;
-		nodes = data.data[selectValue-1].nodes;
+		links = data[selectValue-1].links;
+		nodes = data[selectValue-1].nodes;
 		n = nodes.length;
 		var matrix = [];
 
