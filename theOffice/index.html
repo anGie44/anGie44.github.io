@@ -121,7 +121,7 @@
 		d3.select("#episode").selectAll("option").remove();
 		selectValue = d3.select("#season").property('value');
 		d3.queue()
-			.defer(d3.request, "https://the-office-api.herokuapp.com/season/" + selectValue + "/format/connections")
+			.defer(d3.request, "https://the-office.fly.dev/season/" + selectValue + "/format/connections")
 			.await(function(error, results) {
 				data = JSON.parse(results.response);
 				data.sort((a,b) => a.episode - b.episode)
